@@ -18,4 +18,10 @@ export EDITOR=vim
 autoload -U autocd
 setopt autocd
 setopt extendedglob
+setopt autopushd
+setopt pushdignoredups
+
+
+COMPLETION_WATING_DOTS="true"
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z} l:|=* r:|=*'
 zstyle ':completion:*' menu select

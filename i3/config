@@ -10,7 +10,6 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
-set $mod1 Mod1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
@@ -19,49 +18,29 @@ font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # clear in small sizes. However, if you need a lot of unicode glyphs or
 # right-to-left text rendering, you should instead use pango for rendering and
 # chose a FreeType font, such as:
-# font pango:DejaVu Sans Mono 10
+#font pango:DejaVu Sans Mono 10
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec xfce4-terminal
-bindsym $mod1+Return exec xfce4-terminal
+bindsym $mod+Return exec i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -l 20
+bindsym $mod+d exec dmenu_run
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
-bindsym $mod+z exec --no-startup-id "ls ~/.workspaces | grep \.sh | dmenu -l 10 | xargs -I{} bash -c  ~/.workspaces/{}"
-bindsym $mod+x exec "~/.local/bin/quickswitch.py -w"
-bindsym $mod+c exec "~/.local/bin/i3-name --set"
-bindsym $mod+b exec "~/.local/bin/quickswitch.py -s"
-bindsym $mod+Shift+b move scratchpad
-bindsym $mod+g exec "echo -e 1000\\n2000\\n3000\\n4000\\n5000\\n6000\\n6500 | dmenu -p 'Gamma (1000-6500)' -l 10| xargs -I{} redshift -O {}"
-
-
-bindsym Print exec "mpc prev"
-bindsym XF86AudioPrev exec "mpc prev"
-bindsym Shift+Print exec "mpc volume -1"
-bindsym XF86AudioLowerVolume exec "mpc volume -1"
-
-bindsym Scroll_Lock exec "mpc toggle"
-bindsym XF86AudioPlay exec "mpc toggle"
-
-bindsym Pause exec "mpc next"
-bindsym XF86AudioNext exec "mpc next"
-bindsym Shift+Pause exec "mpc volume +1"
-bindsym XF86AudioRaiseVolume exec "mpc volume +1"
-bindsym XF86MonBrightnessDown exec "xbacklight -dec 10"
-bindsym XF86MonBrightnessUp exec "xbacklight -inc 10"
-bindsym XF86AudioMute exec "pulseaudio-ctl mute"
 # change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+semicolon focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -70,10 +49,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+semicolon move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -82,10 +61,10 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+v split h
+bindsym $mod+h split h
 
 # split in vertical orientation
-bindsym $mod+n split v
+bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
@@ -107,10 +86,6 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
-# Force specific workspaces to specific monitors
-workspace "2" output "DVI-D-1"
-workspace "11: chats" output "DVI-D-1"
-
 # switch to workspace
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -122,16 +97,6 @@ bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
-bindsym $mod1+1 workspace 11: chats
-bindsym $mod1+2 workspace 12
-bindsym $mod1+3 workspace 13
-bindsym $mod1+4 workspace 14
-bindsym $mod1+5 workspace 15
-bindsym $mod1+6 workspace 16
-bindsym $mod1+7 workspace 17
-bindsym $mod1+8 workspace 18
-bindsym $mod1+9 workspace 19
-bindsym $mod1+0 workspace 20
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -144,18 +109,6 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
-bindsym $mod1+Shift+1 move container to workspace 11: chats
-bindsym $mod1+Shift+2 move container to workspace 12
-bindsym $mod1+Shift+3 move container to workspace 13
-bindsym $mod1+Shift+4 move container to workspace 14
-bindsym $mod1+Shift+5 move container to workspace 15
-bindsym $mod1+Shift+6 move container to workspace 16
-bindsym $mod1+Shift+7 move container to workspace 17
-bindsym $mod1+Shift+8 move container to workspace 18
-bindsym $mod1+Shift+9 move container to workspace 19
-bindsym $mod1+Shift+0 move container to workspace 20
-
-
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -164,66 +117,45 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-# Locks the workstation
-bindsym $mod+Delete exec "xautolock -enable && xautolock -locknow"
+# logout
+bindsym $mod+Shift+w exec i3lock -t -i /home/nhairs/Pictures/wallhaven-22723.png
 
-bindsym $mod1+h exec "spotify-control Previous"
-bindsym $mod1+l exec "spotify-control Next"
+# Screenlayout
+exec ./.screenlayout/default.sh
+# Backgrounds
+exec --no nitrogen --restore
+
+exec nm-applet
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
-    # These bindings trigger as soon as you enter the resize mode
+        # These bindings trigger as soon as you enter the resize mode
 
-    # Pressing left will shrink the window’s width.
-    # Pressing right will grow the window’s width.
-    # Pressing up will shrink the window’s height.
-    # Pressing down will grow the window’s height.
-    bindsym h resize shrink width 10 px or 10 ppt
-    bindsym j resize grow height 10 px or 10 ppt
-    bindsym k resize shrink height 10 px or 10 ppt
-    bindsym l resize grow width 10 px or 10 ppt
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym semicolon resize grow width 10 px or 10 ppt
 
-    # same bindings, but for the arrow keys
-    bindsym Left resize shrink width 10 px or 10 ppt
-    bindsym Down resize grow height 10 px or 10 ppt
-    bindsym Up resize shrink height 10 px or 10 ppt
-    bindsym Right resize grow width 10 px or 10 ppt
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
 
-
-    # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
 }
+
 bindsym $mod+r mode "resize"
-
-mode "move" {
-    bindsym h move workspace to output left
-    bindsym j move workspace to output up
-    bindsym k move workspace to output down
-    bindsym l move workspace to output right
-
-# back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $mod+m mode "move"
-
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-    status_command $HOME/.local/bin/i3bar-conky
+    status_command i3status
+#    font pango:DejaVu Sans Mono 10
 }
-
-# Assign any windows from the hangouts extension in chrome to the "11: chats" workspace
-assign [class="^google-chrome.*$" instance="^crx_nckgahadagoaajjgafhacjanaoiihapd$"] 11: chats
-
-# Start misc programs / scripts
-exec xfce4-clipman
-exec ~/.i3/local.sh
-exec --no-startup-id xmodmap ~/.Xmodmap
-exec --no-startup-id redshift-gtk -c ~/.config/redshift
-exec systemctl --user start mystuff.target
-exec xrdb ~/.Xresources
-
-for_window [instance="floating_xfce4-terminal"] floating enable, border 1pixel
-for_window [class="^Google-chrome.*$" instance="^crx_gaedmjdfmmahhbjefcbgaolhhanlaolb$"] floating enable

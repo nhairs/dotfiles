@@ -43,18 +43,18 @@ nnoremap tk :wincmd k <CR>
 nnoremap tl :wincmd l <CR>
 
 " Disable the arrow keys
-noremap    <Up>     <NOP>
-noremap    <Down>   <NOP>
-noremap    <Left>   <NOP>
-noremap    <Right>  <NOP>
-inoremap   <Up>     <NOP>
-inoremap   <Down>   <NOP>
-inoremap   <Left>   <NOP>
-inoremap   <Right>  <NOP>
-vnoremap   <Up>     <NOP>
-vnoremap   <Down>   <NOP>
-vnoremap   <Left>   <NOP>
-vnoremap   <Right>  <NOP>
+"noremap    <Up>     <NOP>
+"noremap    <Down>   <NOP>
+"noremap    <Left>   <NOP>
+"noremap    <Right>  <NOP>
+"inoremap   <Up>     <NOP>
+"inoremap   <Down>   <NOP>
+"inoremap   <Left>   <NOP>
+"inoremap   <Right>  <NOP>
+"vnoremap   <Up>     <NOP>
+"vnoremap   <Down>   <NOP>
+"vnoremap   <Left>   <NOP>
+"vnoremap   <Right>  <NOP>
 
 " Easy shortcut to switch back to normal mode
 inoremap jj <esc>
@@ -69,11 +69,7 @@ nnoremap     <F1>    <ESC>
 
 noremap <Leader>m :noh <CR>
 
-" Disable the mouse in neovim (for what ever reason it is enabled by default
-" :-/
-if has('nvim')
-    set mouse=""
-endif
+set mouse=a
 
 if has('nvim')
     " Double tap escape in a neovim terminal to escape back to normal mode

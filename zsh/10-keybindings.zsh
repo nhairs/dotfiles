@@ -27,10 +27,12 @@ bindkey "^[[1;5D" backward-word
 bindkey "^[[1;5C" forward-word
 bindkey "\e[3~" delete-char # Del
 
-# Vim-like key bindings
-bindkey "^H" backward-char # Ctrl-h
-bindkey "^J" down-line-or-history # Ctrl-j
-bindkey "^K" up-line-or-history # Ctrl-k
-bindkey "^L" forward-char #Ctrl-l
+# History key bindings
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "$terminfo[kcuu1]" up-line-or-beginning-search # Up
+bindkey "$terminfo[kcud1]" down-line-or-beginning-search # Down
 
 # vim:ft=zsh

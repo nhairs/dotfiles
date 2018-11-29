@@ -29,6 +29,12 @@ prompt_gentoo_setup "$@"
 
 setopt promptsubst
 
+function venv_info {
+ [ $VIRTUAL_ENV ] && echo '%B%F{yellow}V]%b%f'
+}
+
+PS1="`echo '$(venv_info)'`$PS1"
+
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' actionformats \
     '%F{blue}[%b(%a)%F{blue}]%f '
