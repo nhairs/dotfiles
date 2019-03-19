@@ -12,8 +12,8 @@
     wdiff = diff --word-diff
 
 [user]
-    name = Chris Trotman
-    email = chris@trotman.io
+    name = Nicholas Hairs
+    email = info@nicholashairs.com
 
 [include]
     path = .gitconfig_local
