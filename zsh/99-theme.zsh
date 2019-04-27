@@ -1,55 +1,42 @@
 autoload -U promptinit
 promptinit
 
-prompt_gentoo_setup () {
-    prompt_gentoo_prompt=${1:-'blue'}
-    prompt_gentoo_user=${2:-'green'}
-    prompt_gentoo_root=${3:-'red'}
+prompt_argotha_setup () {
+    function venv_info {
+        [ $VIRTUAL_ENV ] && echo -n '%B%F{yellow}V]%b%f'
+    }
+
+    local prompt_color='blue'
+    local user_color='green'
+    local root_color='red'
+
+    local newline=$'\n'
 
     if [ "$USER" = 'root' ]; then
-        base_prompt="%B%F{$prompt_gentoo_root}%m%k "
+        local base_prompt="%B%F{$root_color}%m%k "
     else
-        base_prompt="%B%F{$prompt_gentoo_user}%n@%m%k "
+        local base_prompt="%B%F{$user_color}%n@%m%k "
     fi
 
-    post_prompt="%b%f%k"
+    local post_prompt="%b%f%k"
 
     #setopt noxtrace localoptions
 
     setopt promptsubst
 
-    path_prompt="%B%F{$prompt_gentoo_prompt}%2~"
-    PS1="$base_prompt$path_prompt %(1j.(%j).)%# $post_prompt"
-    PS2="$base_prompt$path_prompt %_> $post_prompt"
-    PS3="$base_prompt$path_prompt ?# $post_prompt"
+    local path_prompt="%B%F{$prompt_color}%2~"
 
+    # Set promts
+    # For information about what PS[1-4] are see:
+    # https://www.thegeekstuff.com/2008/09/bash-shell-take-control-of-ps1-ps2-ps3-ps4-and-prompt_command/
+    PS1="\$(venv_info)$base_prompt$path_prompt %(1j.(%j).)%# $post_prompt"
+    PS2="%F{$prompt_color}%_> $post_prompt"
+    PS3="%F{$prompt_color}?# $post_prompt"
+
+    RPS1=$'$(git_super_status)'
 }
 
-prompt_gentoo_setup "$@"
-
-setopt promptsubst
-
-function venv_info {
- [ $VIRTUAL_ENV ] && echo '%B%F{yellow}V]%b%f'
-}
-
-PS1="`echo '$(venv_info)'`$PS1"
-
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' actionformats \
-    '%F{blue}[%b(%a)%F{blue}]%f '
-zstyle ':vcs_info:*' formats       \
-    '%F{blue}[%b%F{blue}]%f '
-
-zstyle ':vcs_info:*' enable git
-
-# or use pre_cmd, see man zshcontrib
-vcs_info_wrapper() {
-  vcs_info
-  if [ -n "$vcs_info_msg_0_" ]; then
-    echo "%{%B%}${vcs_info_msg_0_}%{$reset_color%}$del"
-  fi
-}
-RPROMPT=$'$(vcs_info_wrapper)'
+prompt_argotha_setup "$@"
 
 # vim:ft=zsh
+#
