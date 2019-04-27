@@ -1,14 +1,20 @@
-export VIRTUALENVWRAPPER_PYTHON=`which python2 || which python`
-export WORKON_HOME=$HOME/virtual_envs
+### CONSTANTS
+VENV_HOME="$HOME/virtual_envs"
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-if [[ ! -e "$WORKON_HOME" ]]; then
-    $VIRTUALENVWRAPPER_PYTHON -m pip install --user virtualenvwrapper
-    mkdir -p $WORKON_HOME
+
+### SETUP
+which virtualenv >/dev/null
+if [[ $? == 1 ]]; then
+    python3 -m pip install --user virtualenv
 fi
 
-source `which virtualenvwrapper.sh`
+if [[ ! -e "$VENV_HOME" ]]; then
+    mkdir -p $VENV_HOME
+fi
 
-export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+### MAIN FUNCITON
 
 function venv {
     if [[ "$2" == "--verbose" ]]; then
@@ -30,15 +36,16 @@ function venv {
         local PROJECT_NAME="scrap_$PY_VERSION"
     fi
 
-    lsvirtualenv -b | grep $PROJECT_NAME > /dev/null
-    if [[ $? == 1 ]]; then
+    local VENV_PATH="${VENV_HOME}/${PROJECT_NAME}"
+
+    if [[ ! -d $VENV_PATH ]]; then
         # No virtual env, lets create it
-        mkvirtualenv -p "python$PY_VERSION" $PROJECT_NAME
+        virtualenv -p "python$PY_VERSION" $VENV_PATH
     fi
 
-    echo $PROJECT_NAME
+    echo $VENV_PATH
 
-    workon $PROJECT_NAME
+    source "${VENV_PATH}/bin/activate"
 
     if [[ $VERBOSE == 1 ]]; then
         set +x
