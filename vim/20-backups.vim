@@ -9,4 +9,5 @@ endfunction
 execute 'set backupdir=' . s:mkdir('~/.vim/backups//')
 execute 'set directory=' . s:mkdir('~/.vim/swap//')
 
+set backup
 set backupcopy=yes
