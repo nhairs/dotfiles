@@ -13,7 +13,7 @@ colors
 
 export PATH="$HOME/.local/bin:$PATH"
 
-export EDITOR=vim
+export EDITOR='vim'
 
 autoload -U autocd
 setopt autocd
@@ -25,3 +25,6 @@ setopt pushdignoredups
 COMPLETION_WATING_DOTS="true"
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z} l:|=* r:|=*'
 zstyle ':completion:*' menu select
+
+# References
+# https://superuser.com/a/1092328
