@@ -120,12 +120,11 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 # logout
 bindsym $mod+Shift+w exec i3lock -t -i /home/nhairs/Pictures/wallhaven-22723.png
 
-# Screenlayout
-exec ./.screenlayout/default.sh
 # Backgrounds
 exec --no nitrogen --restore
 
 exec nm-applet
+exec udiskie
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
