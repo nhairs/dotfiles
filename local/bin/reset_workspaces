@@ -1,0 +1,23 @@
+#!/bin/bash
+
+LEFT_SCREEN="eDP-1-1"
+CENTRE_SCREEN="HDMI-0"
+RIGHT_SCREEN=""
+
+LEFT_WORKSPACES="2 4 6 8 10 12"
+CENTRE_WORKSPACES="1 3 5 7 9 11 13"
+RIGHT_WORKSPACES=""
+
+for WORKSPACE in $LEFT_WORKSPACES; do
+    i3-msg "[workspace=^${WORKSPACE}$] move workspace to output ${LEFT_SCREEN}"
+done
+
+
+for WORKSPACE in $CENTRE_WORKSPACES; do
+    i3-msg "[workspace=^${WORKSPACE}$] move workspace to output ${CENTRE_SCREEN}"
+done
+
+
+for WORKSPACE in $RIGHT_WORKSPACES; do
+    i3-msg "[workspace=^${WORKSPACE}$] move workspace to output ${RIGHT_SCREEN}"
+done
