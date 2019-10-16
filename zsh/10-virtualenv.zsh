@@ -26,14 +26,16 @@ function venv {
 
     local PY_VERSION=${1:-3}
 
-    local GIT_DIR=`git rev-parse --git-dir 2> /dev/null`
-    if [[ -n "$GIT_DIR" ]]; then
-        # We are in a git directory
-        local GIT_DIR=`cd $GIT_DIR; pwd`
-        local PROJECT_NAME=`dirname $GIT_DIR | sed "s|^$HOME/||" | tr / _`
-    else
-        (>&2 echo "Could not find a .git, using scrap")
-        local PROJECT_NAME="scrap_$PY_VERSION"
+    if [[ -z $PROJECT_NAME ]]; then
+        local GIT_DIR=`git rev-parse --git-dir 2> /dev/null`
+        if [[ -n "$GIT_DIR" ]]; then
+            # We are in a git directory
+            local GIT_DIR=`cd $GIT_DIR; pwd`
+            local PROJECT_NAME=`dirname $GIT_DIR | sed "s|^$HOME/||" | tr / _`
+        else
+            (>&2 echo "Could not find a .git, using scrap")
+            local PROJECT_NAME="scrap_$PY_VERSION"
+        fi
     fi
 
     local VENV_PATH="${VENV_HOME}/${PROJECT_NAME}"

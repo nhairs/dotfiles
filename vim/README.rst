@@ -63,3 +63,23 @@ Keyboard combination    Shortcut description
 <Leader>t               CommandT (if vim has ruby)
 <Leader>g               Goyo
 ======================= ==========================
+
+Installation
+============
+You may need to perform additional steps when installing:
+```lang=bash
+sudo add-apt-repository ppa:neovim-ppa/stable
+sudo apt update
+sudo apt install neovim  # sudo apt upgrade neovim
+```
+
+You may need to create virtual envs
+```lang=bash
+PROJECT_NAME=neovim2 venv 2
+pip install pynvim
+deactivate
+
+PROJECT_NAME=neovim3 venv 3
+pip install pynvim
+deactivate
+```
