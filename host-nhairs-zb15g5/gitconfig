@@ -1,7 +1,7 @@
 [core]
     editor = vim
     excludesfile = ~/.gitignore_global
-	pager = less -+X -+F
+    pager = less -+X -+F
 
 [color]
     ui = auto
@@ -14,7 +14,7 @@
 
 [user]
     name = Nicholas Hairs
-    email = info@nicholashairs.com
+    email = nicholas.hairs@finder.com
 
 [include]
     path = .gitconfig_local
