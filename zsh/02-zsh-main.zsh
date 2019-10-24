@@ -11,7 +11,8 @@ setopt autocd
 autoload -U colors
 colors
 
-export PATH="$HOME/.local/bin:$PATH"
+# Should consider adding GOPATH somewhere. default is $HOME/go
+export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
 
 export EDITOR='vim'
 
