@@ -1,0 +1,31 @@
+[core]
+    editor = vim
+    excludesfile = ~/.gitignore_global
+    pager = less -+X -+F
+
+[color]
+    ui = auto
+
+[merge]
+    tool = vimdiff
+
+[alias]
+    wdiff = diff --word-diff
+
+[user]
+    name = Nicholas Hairs
+    email = info@nicholashairs.com
+
+[include]
+    path = .gitconfig_local
+
+[push]
+    default = current
+
+[rebase]
+    stat = true
+
+[diff]
+    context = 15
+[log]
+    date = local
