@@ -91,6 +91,7 @@ call dein#add('solarnz/python.vim') " Python syntax highlighting
 call dein#add('solarnz/thrift.vim') " Thrift language support
 call dein#add('vim-ruby/vim-ruby')
 call dein#add('wting/rust.vim') " Rust language support
+call dein#add('pearofducks/ansible-vim') " Ansible (YAML, Jinja2) Support
 
 call dein#end()
 
