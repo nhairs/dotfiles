@@ -19,14 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-### ATTRIBUTION
-### ============================================================================
-This section does not form part of the licence, however is provided in order to
-meet the licence requirements of included software.
-
-This software includes the following licenced software:
-- "dotfiles"
-  Copyright (c) 2015 Chris Trotman
-  Licenced under The MIT Licence
-  Source: https://github.com/solarnz/dotfiles
