@@ -189,6 +189,54 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# Move workspaces between screens
+mode "mv_screen" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j move workspace to output left
+        bindsym k move workspace to output down
+        bindsym l move workspace to output up
+        bindsym semicolon move workspace to output right
+
+        # same bindings, but for the arrow keys
+        bindsym Left move workspace to output left
+        bindsym Down move workspace to output down
+        bindsym Up move workspace to output up
+        bindsym Right move workspace to output right
+
+        # switch to workspace (so that we can move lots at a time)
+        bindsym $mod+1 workspace 1
+        bindsym $mod+2 workspace 2
+        bindsym $mod+3 workspace 3
+        bindsym $mod+4 workspace 4
+        bindsym $mod+5 workspace 5
+        bindsym $mod+6 workspace 6
+        bindsym $mod+7 workspace 7
+        bindsym $mod+8 workspace 8
+        bindsym $mod+9 workspace 9
+        bindsym $mod+0 workspace 10
+        bindsym $mod+Control+1 workspace 11
+        bindsym $mod+Control+2 workspace 12
+        bindsym $mod+Control+3 workspace 13
+        bindsym $mod+Control+4 workspace 14
+        bindsym $mod+Control+5 workspace 15
+        bindsym $mod+Control+6 workspace 16
+        bindsym $mod+Control+7 workspace 17
+        bindsym $mod+Control+8 workspace 18
+        bindsym $mod+Control+9 workspace 19
+        bindsym $mod+Control+0 workspace 20
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+m mode "mv_screen"
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
