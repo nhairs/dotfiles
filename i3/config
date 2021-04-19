@@ -159,6 +159,7 @@ bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 20 # decrease
 exec --no-startup-id nitrogen --restore
 exec --no-startup-id nm-applet
 exec --no-startup-id udiskie -t
+exec --no-startup-id blueman-applet
 # exec --no-startup-id volumeicon
 # look into:
 # - xautolock (https://michaelabrahamsen.com/posts/custom-lockscreen-i3lock/)
