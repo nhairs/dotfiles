@@ -22,6 +22,8 @@ alias -r gla="gl --all"
 
 alias -r vim="vim -p"
 
+alias -r newpy="cp ~/git/template.py"
+
 #alias -r nose="nosetests --with-yanc --with-watcher"
 
 alias -r t="tree -I 'venv|venv2|venv3|__pycache__|*.pyc'"
