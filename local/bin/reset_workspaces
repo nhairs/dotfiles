@@ -1,21 +1,30 @@
 #!/bin/bash
 
+## Default Values
+## -----------------------------------------------------------------------------
+
+BIG_LEFT_WORKSPACES="2 4 6 8 10 12"
+BIG_RIGHT_WORKSPACES="1 3 5 7 9 11 13"
+SMALL_WORKSPACES="20"
+
+SMALL_SCREEN="eDP-1-1" # aka laptop screen
+
+## Host Specific Values
+## -----------------------------------------------------------------------------
+
 if [ "$(hostname)" = "radon" ]; then
     # Personal
-    SMALL_SCREEN="eDP-1-1" # aka laptop screen
     BIG_LEFT_SCREEN="DP-1-1"
     BIG_RIGHT_SCREEN="DP-1-2"
 
 elif [ "$(hostname)" = "nhairs-zb15g5" ]; then
     # Work
-    SMALL_SCREEN="eDP-1-1" # aka laptop screen
     BIG_LEFT_SCREEN="DP-0.1"
     BIG_RIGHT_SCREEN="DP-0.2"
 fi
 
-BIG_LEFT_WORKSPACES="2 4 6 8 10 12"
-BIG_RIGHT_WORKSPACES="1 3 5 7 9 11 13"
-SMALL_WORKSPACES="20"
+## Move workspaces to screens
+## -----------------------------------------------------------------------------
 
 for WORKSPACE in $BIG_LEFT_WORKSPACES; do
     i3-msg "[workspace=^${WORKSPACE}$] move workspace to output ${BIG_LEFT_SCREEN}"
