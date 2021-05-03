@@ -13,14 +13,22 @@ SMALL_SCREEN="eDP-1-1" # aka laptop screen
 ## -----------------------------------------------------------------------------
 
 if [ "$(hostname)" = "radon" ]; then
-    # Personal
+    ## Personal
+    # Home
     BIG_LEFT_SCREEN="DP-1-1"
     BIG_RIGHT_SCREEN="DP-1-2"
 
 elif [ "$(hostname)" = "nhairs-zb15g5" ]; then
-    # Work
-    BIG_LEFT_SCREEN="DP-0.1"
-    BIG_RIGHT_SCREEN="DP-0.2"
+    ## Work
+    if [ "$(1)" = "home" ]; then
+        # Home
+        BIG_LEFT_SCREEN="DP-0.1"
+        BIG_RIGHT_SCREEN="DP-0.2"
+    else
+        # Office
+        BIG_LEFT_SCREEN="DP-0"
+        BIG_RIGHT_SCREEN="DP-1"
+    fi
 fi
 
 ## Move workspaces to screens
