@@ -20,7 +20,7 @@ if [ "$(hostname)" = "radon" ]; then
 
 elif [ "$(hostname)" = "nhairs-zb15g5" ]; then
     ## Work
-    if [ "$(1)" = "home" ]; then
+    if [ "${1}" = "home" ]; then
         # Home
         BIG_LEFT_SCREEN="DP-0.1"
         BIG_RIGHT_SCREEN="DP-0.2"
@@ -28,6 +28,31 @@ elif [ "$(hostname)" = "nhairs-zb15g5" ]; then
         # Office
         BIG_LEFT_SCREEN="DP-0"
         BIG_RIGHT_SCREEN="DP-1"
+    fi
+
+elif [ "$(hostname)" = "nh-t14g2" ]; then
+    ## Work
+    SMALL_SCREEN="eDP" # aka laptop screen
+    if [ "${1}" = "home" ]; then
+        # Home
+        # adaptor randomly changes what ports are connected
+        if xrandr | grep -q "DisplayPort-2 connected" ; then
+            BIG_LEFT_SCREEN="DisplayPort-2"
+            BIG_RIGHT_SCREEN="DisplayPort-3"
+        else
+            BIG_LEFT_SCREEN="DisplayPort-4"
+            BIG_RIGHT_SCREEN="DisplayPort-5"
+        fi
+    else
+        # Office
+        # adaptor randomly changes what ports are connected
+        if xrandr | grep -q "DisplayPort-2 connected" ; then
+            BIG_LEFT_SCREEN="DisplayPort-3"
+            BIG_RIGHT_SCREEN="DisplayPort-2"
+        else
+            BIG_LEFT_SCREEN="DisplayPort-5"
+            BIG_RIGHT_SCREEN="DisplayPort-4"
+        fi
     fi
 fi
 

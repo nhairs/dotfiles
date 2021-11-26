@@ -1,0 +1,109 @@
+# Standard update stuff
+sudo apt update & sudo apt upgrade
+
+# Install packages
+sudo apt install \
+    git \
+    i3 \
+    python3-pip \
+    blueman \
+    neovim \
+    rcm \
+    arandr \
+    htop \
+    tldr \
+    tree \
+    silversearcher-ag \
+    mtr \
+    nmap \
+    whois
+
+# t14 gen 2 on ubuntu 20.04
+# install wifi driver
+mkdir -p ~/git/extern
+cd ~/git/extern
+git clone https://github.com/lwfinger/rtw89.git -b v7
+cd rtw89
+make
+sudo make sign-install
+sudo cp suspend_rtw89 /usr/lib/systemd/system-sleep
+sudo modprobe rtw89pci
+
+# dotfiles
+git clone https://github.com/nhairs/dotfiles
+rcup -d ~/dotfiles
+
+# this does link some files we don't want like the README can manually remove these, or deal with later...
+
+# Change shell
+chsh
+# /bin/zsh
+
+# EXIT AND START i3 AND THEN OPEN NEW SHELL (which will be zsh)
+
+# this will then also do things like install virtualenv
+
+# setup neovim
+virtualenv -p python3 ~/virtual_envs/neovim3
+source ~/virtual_envs/neovim3/bin/activate
+pip install pynvim neovim
+deactivate
+
+# run neovim
+# MAKE SURE TO WAIT FOR IT TO FINISH INSTALLING ON FIRST RUN
+vim
+
+# Install other utilities
+# make sure that pip is python3-pip
+pip3 install --user \
+    udiskie \
+    pulsemixer \
+    mycli
+
+# install light (backlightchanger)
+cd ~/git/extern
+git clone ttps://github.com/haikarainen/light.git
+
+# Make directories
+mkdir ~/Pictures/capture
+
+# xterm shit
+# sudo ln -sf /usr/share/terminfo/x/xterm-color /usr/share/terminfo/x/xterm-256color
+
+
+## work
+#barracudavpn
+#crowdstrike
+
+
+# tablet stuff
+# sudo apt install xserver-xorg-input-wacom-hwe-18.04
+# xsetwacom --set <N> MapToOutput <output>
+# https://krita.org/en/download/krita-desktop/
+#
+# https://github.com/xournalpp/xournalpp#ubuntu-and-derivatives
+# sudo add-apt-repository ppa:apandada1/xournalpp-stable
+# sudo apt update
+# sudo apt install xournalpp
+
+
+# Install Docker
+# TODO
+# Set sane defaults
+sudo cat > /etc/docker/daemon.json <<EOT
+{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "50m",
+    "max-file": "3"
+  },
+  "default-address-pools" : [
+      {
+          "scope": "global",
+          "base": "192.168.128.0/20",
+          "size": 26
+      }
+  ]
+}
+EOT
+
