@@ -27,5 +27,9 @@
 
 [diff]
     context = 15
+
 [log]
     date = local
+
+[init]
+    defaultBranch = main
