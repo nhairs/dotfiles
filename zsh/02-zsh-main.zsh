@@ -12,7 +12,7 @@ autoload -U colors
 colors
 
 # Should consider adding GOPATH somewhere. default is $HOME/go
-export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/go/bin:/usr/local/go/bin:$PATH"
 
 export EDITOR='vim'
 
