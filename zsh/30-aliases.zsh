@@ -33,12 +33,18 @@ alias -r newpy="cp ~/git/template.py"
 
 alias -r t="tree -I 'venv|venv2|venv3|__pycache__|*.pyc|node_modules'"
 
-
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias -r alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-alias -r gpg="echo 'Use gpg2!'"
+## Ensure that we only use gpg version ~=2
+if which gpg >/dev/null; then
+    # gpg exists, check version
+    if [[ $(gpg --version | head -n 1 | cut -d " " -f 3 | cut -d "." -f 1) != 2 ]]; then
+        # gpg isn't version 2, create alias to guard against using version 1
+        alias -r gpg="echo 'Use gpg2!'"
+    fi
+fi
 
 
 alias new_pass='echo `head /dev/urandom | base64 | tr -d / | tr -d + | head -c 32`'
