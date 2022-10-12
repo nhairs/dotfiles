@@ -20,6 +20,11 @@ alias -r gco='git checkout'
 alias -r gl="git log --date-order --graph --pretty=format:'%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cr) %C(bold blue)<%an>%C(reset)' --abbrev-commit --date=relative"
 alias -r gla="gl --all"
 
+if which terraform >/dev/null; then
+    alias -r tf="terraform"
+fi
+
+
 alias -r vim="vim -p"
 
 alias -r newpy="cp ~/git/template.py"
