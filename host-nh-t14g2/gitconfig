@@ -33,3 +33,6 @@
 
 [init]
     defaultBranch = main
+
+[url "ssh://git@github.com/finderau/"]
+    insteadOf = https://github.com/finderau/

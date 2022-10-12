@@ -40,6 +40,8 @@ alias new_pass='echo `head /dev/urandom | base64 | tr -d / | tr -d + | head -c 3
 alias screenshot='gnome-screenshot -a -f ~/Pictures/capture/capture-`date +%Y%m%d-%H%M%S`.jpg'
 alias screenhere='gnome-screenshot -a -f ./capture-`date +%Y%m%d-%H%M%S`.jpg'
 
+alias update_zoom='sudo true && wget -O /tmp/zoom.deb https://zoom.us/client/latest/zoom_amd64.deb && sudo dpkg -i /tmp/zoom.deb; rm -f /tmp/zoom.deb'
+
 function make_gif () {
     ffmpeg -y -i $1 -vf palettegen /tmp/make_gif_pallete.png
     ffmpeg -y -i $1 -i /tmp/make_gif_pallete.png -filter_complex paletteuse -r 10 ~/Videos/giffed.`date +%Y-%m-%d`.gif
