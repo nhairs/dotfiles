@@ -1,0 +1,137 @@
+#! /bin/bash
+
+set -e  # Bail at the first sign of trouble
+
+### CONSTANTS
+### ============================================================================
+: ${DEBUG:=0}
+: ${TEST:=0}
+: ${IPSET_FILE:=/var/tmp/fastly.ipset}
+: ${IPSET_CACHE:=/tmp/fastly.ipset}
+
+### FUNCTIONS
+### ============================================================================
+function fetch_fastly_cidrs {
+    info "Fetching Fastly CIDRs"
+    curl -s "https://api.fastly.com/public-ip-list" -H "Accept: application/json" \
+        | jq ".addresses[]" \
+        | tr -d '"' \
+        > $IPSET_CACHE || true
+
+    if [ "$(cat $IPSET_CACHE | wc -l)" = 0 ] || [ "$TEST" = 1 ]; then
+        if [ ! -f $IPSET_FILE ] || [ "$(cat $IPSET_FILE | wc -l)" = 0 ]; then
+            error "Unable to fetch Fastly CIDRs and none are cached."
+        fi
+
+        warning "Unable to fetch Fastly CIDRs. Using cached instead."
+
+    else
+        # Succesfully obtained new IPs, update cache
+        cp $IPSET_CACHE $IPSET_FILE
+    fi
+
+    if [ "$DEBUG" = 1 ]; then
+        debug "Fastly CIDRs:"
+        cat ${IPSET_FILE}
+    fi
+}
+
+function get_default_route {
+    DEFAULT_ROUTE=$(
+    ip route \
+        | grep -E "^default via (192\.168|10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.)" \
+        | grep -Eo "via \S* dev \S*"
+    ) || error "Unable to find default route"
+
+    debug "Default Route: \"$DEFAULT_ROUTE\""
+}
+
+
+## Utility
+## -----------------------------------------------------------------------------
+function heading {
+    # Print a pretty heading
+    # https://en.wikipedia.org/wiki/Box-drawing_character#Unicode
+    echo -e "\e[1;32m╓\e[0m $@"
+    echo -e "\e[1;32m╙───────────────────\e[0m"
+}
+
+function debug {
+    if [ "$DEBUG" = 1 ]; then
+        echo -e "\e[1;35mDEBUG:\e[0m $1"
+    fi
+}
+
+function info {
+    echo -e "\e[1;34mINFO:\e[0m $1"
+}
+
+function warning {
+    echo -e "\e[1;33mWARNING:\e[0m $1"
+}
+
+function error {
+    echo -e "\e[1;31mERROR:\e[0m $1"
+    exit 1
+}
+
+
+
+### MAIN
+### ============================================================================
+
+# Check we have sudo
+sudo /bin/true
+if [ $? != 0 ]; then
+    error "Must be able to run sudo"
+fi
+
+case $1 in
+
+    up)
+        heading "Adding routes"
+        fetch_fastly_cidrs
+        get_default_route
+        while IFS="" read -r cidr || [ -n "$cidr" ]; do
+            if [ -z "$(ip route | grep "$cidr $DEFAULT_ROUTE")" ]; then
+                sudo ip route add $cidr $DEFAULT_ROUTE || warning "Failed to set route for $cidr"
+                info "Set route for $cidr"
+            else
+                info "Route already set for $cidr"
+            fi
+        done < $IPSET_FILE
+
+        if [ "$DEBUG" = 1 ]; then
+            debug "Route table:"
+            ip route
+        fi
+        ;;
+
+    down)
+        heading "Removing routes"
+        if [ ! -f $IPSET_FILE ]; then
+            fetch_fastly_cidrs
+        fi
+
+        while IFS="" read -r cidr || [ -n "$cidr" ]; do
+            debug "Checking $cidr"
+            existing_route="$(ip route | grep "$cidr" || true)"
+            if [ -z "$existing_route" ]; then
+                info "$cidr does not have route"
+            else
+                sudo ip route delete $existing_route || warning "Failed to remove route for $cidr"
+                info "Removed route for $cidr"
+            fi
+
+        done < $IPSET_FILE
+
+        if [ "$DEBUG" = 1 ]; then
+            debug "Route table:"
+            ip route
+        fi
+        ;;
+
+    *)
+        echo "Usage: fastly_routes [down|up]"
+        ;;
+esac
