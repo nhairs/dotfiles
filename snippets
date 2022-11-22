@@ -1,0 +1,7 @@
+# Get certificate transparency log sizes.
+LOGLIST="https://www.gstatic.com/ct/log_list/log_list.json"
+LOGLISTALL="https://www.gstatic.com/ct/log_list/all_logs_list.json"
+
+curl -s $LOGLIST | jq ".logs[].url" | xargs | tr " " "\n" | xargs -P 10 -I {} -- curl -Ls "https://{}ct/v1/get-sth" | jq ".tree_size" | python -c "import sys; print(sum(int(l) for l in sys.stdin))"
+
+curl -s $LOGLIST | jq ".logs[].url" | tr " " "\n" | xargs -I {} sh -c 'echo -n "{} "; curl -Ls "https://{}ct/v1/get-sth" | jq ".tree_size"'

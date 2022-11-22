@@ -68,6 +68,13 @@ pip3 install --user \
 cd ~/git/extern
 git clone ttps://github.com/haikarainen/light.git
 
+# Install google cli
+# https://cloud.google.com/sdk/docs/install#deb
+# echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+# curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+# sudo apt update && sudo apt install google-cloud-cli
+# gcloud init
+
 # Make directories
 mkdir ~/Pictures/capture
 
@@ -99,6 +106,8 @@ update_zoom  # is an alias now :D
 
 # Install Docker
 # TODO
+# allow my user to use docker - requires restart of i3 (logout/login)
+sudo usermod -a -G docker $USER
 # Set sane defaults
 sudo cat > /etc/docker/daemon.json <<EOT
 {
@@ -122,3 +131,9 @@ EOT
 # https://go.dev/doc/install
 wget -P /tmp https://go.dev/dl/go1.18.1.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf /tmp/go1.18.1.linux-amd64.tar.gz
+
+# Wireshark
+# make sure to allow select "allow users to capture"
+sudo apt install wireshark
+# allow my user to capture - requires restart of i3 (logout/login)
+sudo usermod -a -G wireshark $USER
