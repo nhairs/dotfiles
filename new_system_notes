@@ -16,7 +16,8 @@ sudo apt install \
     silversearcher-ag \
     mtr \
     nmap \
-    whois
+    whois \
+    ipcalc
 
 # https://bugs.launchpad.net/pinta/+bug/1786822/comments/21
 sudo snap install pinta
