@@ -22,6 +22,10 @@ alias -r gla="gl --all"
 
 if which terraform >/dev/null; then
     alias -r tf="terraform"
+    alias -r tfw="terraform workspace"
+    alias -r tff="terraform fmt"
+    alias -r tfp="terraform plan"
+    alias -r tfa="terraform apply"
 fi
 
 
