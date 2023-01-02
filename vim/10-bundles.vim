@@ -64,6 +64,8 @@ call dein#add('chrisbra/vim-diff-enhanced') " Better differential algorithms
 call dein#add('vimwiki/vimwiki')
 call dein#add('tpope/vim-surround')
 
+call dein#add('tpope/vim-dadbod') " ?better? SQL plugin
+
 call dein#add('junegunn/fzf', {'merged': 0})
 call dein#add('junegunn/fzf.vim')
 
@@ -92,6 +94,7 @@ call dein#add('solarnz/thrift.vim') " Thrift language support
 call dein#add('vim-ruby/vim-ruby')
 call dein#add('wting/rust.vim') " Rust language support
 call dein#add('pearofducks/ansible-vim') " Ansible (YAML, Jinja2) Support
+call dein#add('kristijanhusak/vim-dadbod-completion') " dadbod SQL completion
 
 call dein#end()
 
