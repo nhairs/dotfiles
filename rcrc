@@ -1,1 +1,1 @@
-EXCLUDE="*.md LICENCE NOTICE install.sh new_system_notes snippets"
+EXCLUDES="*.md LICENCE LICENSE NOTICE install.sh new_system_notes snippets"
