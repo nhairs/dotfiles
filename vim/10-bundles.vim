@@ -23,8 +23,7 @@ if has('vim_starting')
         execute 'set runtimepath^=' . finddir('dein.vim', '.;')
     elseif &runtimepath !~ '/dein.vim'
         if !isdirectory(s:plugin_dir.'/repos/github.com/Shougo/dein.vim')
-            execute printf('!git clone %s://github.com/Shougo/dein.vim.git',
-                        \ (exists('$http_proxy') ? 'https' : 'git'))
+            execute '!git clone https://github.com/Shougo/dein.vim.git'
                         \ s:plugin_dir.'/repos/github.com/Shougo/dein.vim'
             let s:install_plugins = 1
         endif
