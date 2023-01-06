@@ -7,7 +7,7 @@ BIG_LEFT_WORKSPACES="2 4 6 8 10 12"
 BIG_RIGHT_WORKSPACES="1 3 5 7 9 11 13"
 SMALL_WORKSPACES="20"
 
-SMALL_SCREEN="eDP-1-1" # aka laptop screen
+SMALL_SCREEN="eDP-1" # aka laptop screen
 
 ## Host Specific Values
 ## -----------------------------------------------------------------------------
@@ -17,18 +17,6 @@ if [ "$(hostname)" = "radon" ]; then
     # Home
     BIG_LEFT_SCREEN="DP-1-1"
     BIG_RIGHT_SCREEN="DP-1-2"
-
-elif [ "$(hostname)" = "nhairs-zb15g5" ]; then
-    ## Work
-    if [ "${1}" = "home" ]; then
-        # Home
-        BIG_LEFT_SCREEN="DP-0.1"
-        BIG_RIGHT_SCREEN="DP-0.2"
-    else
-        # Office
-        BIG_LEFT_SCREEN="DP-0"
-        BIG_RIGHT_SCREEN="DP-1"
-    fi
 
 elif [ "$(hostname)" = "nh-t14g2" ]; then
     ## Work
