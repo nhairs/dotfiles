@@ -3,9 +3,11 @@ sudo apt update & sudo apt upgrade
 
 # Install packages
 sudo apt install \
+    zsh \
     git \
     i3 \
     python3-pip \
+    nitrogen \
     blueman \
     neovim \
     rcm \
@@ -14,6 +16,7 @@ sudo apt install \
     tldr \
     tree \
     silversearcher-ag \
+    jq \
     mtr \
     nmap \
     whois \
@@ -35,9 +38,7 @@ sudo modprobe rtw89pci
 
 # dotfiles
 git clone https://github.com/nhairs/dotfiles
-rcup -d ~/dotfiles
-
-# this does link some files we don't want like the README can manually remove these, or deal with later...
+RCRC=~/dotfiles/rcrc rcup -d ~/dotfiles -v
 
 # Change shell
 chsh
@@ -46,6 +47,9 @@ chsh
 # EXIT AND START i3 AND THEN OPEN NEW SHELL (which will be zsh)
 
 # this will then also do things like install virtualenv
+
+# enable ssh-agent
+systemctl --user enable --now ssh-agent
 
 # setup neovim
 virtualenv -p python3 ~/virtual_envs/neovim3
@@ -63,11 +67,16 @@ pip3 install --user \
     udiskie \
     pulsemixer \
     mycli \
-    grip
+    grip \
+    awscli
 
 # install light (backlightchanger)
-cd ~/git/extern
-git clone ttps://github.com/haikarainen/light.git
+#cd ~/git/extern
+#git clone https://github.com/haikarainen/light.git
+cd /tmp
+wget https://github.com/haikarainen/light/releases/download/v1.2/light_1.2_amd64.deb
+sudo dpkg -i light_1.2_amd64.deb
+sudo usermod -a -G video $USER
 
 # Install google cli
 # https://cloud.google.com/sdk/docs/install#deb
@@ -106,11 +115,24 @@ mkdir ~/Pictures/capture
 update_zoom  # is an alias now :D
 
 # Install Docker
-# TODO
+# https://docs.docker.com/engine/install/ubuntu/#set-up-the-repository
+sudo apt-get update
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 # allow my user to use docker - requires restart of i3 (logout/login)
 sudo usermod -a -G docker $USER
 # Set sane defaults
-sudo cat > /etc/docker/daemon.json <<EOT
+sudo tee /etc/docker/daemon.json <<EOT
 {
   "log-driver": "json-file",
   "log-opts": {
@@ -126,7 +148,16 @@ sudo cat > /etc/docker/daemon.json <<EOT
   ]
 }
 EOT
+sudo systemctl restart docker
+systemctl status docker
 
+# Install docker-compose
+# https://docker-docs.netlify.app/compose/install/#install-compose
+# NOTE: check for newer versions
+sudo curl -L https://github.com/docker/compose/releases/download/v2.14.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+# https://docker-docs.netlify.app/compose/completion/#zsh
+#
 
 # Golang
 # https://go.dev/doc/install
