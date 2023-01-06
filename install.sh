@@ -3,9 +3,9 @@
 # Install rcm to $HOME/.local/
 TEMP=`mktemp -d -p $HOME`
 pushd $TEMP
-wget https://thoughtbot.github.com/rcm/dist/rcm-1.2.3.tar.gz
-tar xvzf rcm-1.2.3.tar.gz
-pushd rcm-1.2.3
+wget https://thoughtbot.github.com/rcm/dist/rcm-1.3.6.tar.gz
+tar xvzf rcm-1.3.6.tar.gz
+pushd rcm-1.3.6
 ./configure --prefix=$HOME/.local/
 make && make install
 
@@ -14,4 +14,4 @@ popd
 rm -rf $TEMP
 
 # Install dotfiles
-PATH=$PATH:$HOME/.local/bin $HOME/.local/bin/rcup -d `dirname $0`
+RCRC=$HOME/`dirname $0`/rcrc PATH=$PATH:$HOME/.local/bin $HOME/.local/bin/rcup -d `dirname $0`
