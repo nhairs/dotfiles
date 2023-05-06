@@ -1,0 +1,9 @@
+[user]
+    name = Nicholas Hairs
+    email = nicholas.hairs@lumin.gg
+
+[core]
+    sshCommand = ssh -i ~/.ssh/lumin.20221013.ed25519
+
+[url "ssh://git@github.com/lumin-gg/"]
+    insteadOf = https://github.com/lumin-gg/
