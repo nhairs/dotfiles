@@ -9,7 +9,6 @@ sudo apt install \
     python3-pip \
     nitrogen \
     blueman \
-    neovim \
     rcm \
     arandr \
     htop \
@@ -21,6 +20,11 @@ sudo apt install \
     nmap \
     whois \
     ipcalc
+
+# Neovim
+sudo add-apt-repository ppa:neovim-ppa/stable
+sudo apt update
+sudo apt install neovim
 
 # https://bugs.launchpad.net/pinta/+bug/1786822/comments/21
 sudo snap install pinta
@@ -134,17 +138,20 @@ sudo usermod -a -G docker $USER
 # Set sane defaults
 sudo tee /etc/docker/daemon.json <<EOT
 {
+  "features": {
+    "buildkit": true
+  },
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "50m",
     "max-file": "3"
   },
   "default-address-pools" : [
-      {
-          "scope": "global",
-          "base": "192.168.128.0/20",
-          "size": 26
-      }
+    {
+      "scope": "global",
+      "base": "192.168.128.0/20",
+      "size": 26
+    }
   ]
 }
 EOT
