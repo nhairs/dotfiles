@@ -18,30 +18,10 @@ if [ "$(hostname)" = "radon" ]; then
     BIG_LEFT_SCREEN="DP-1-1"
     BIG_RIGHT_SCREEN="DP-1-2"
 
-elif [ "$(hostname)" = "nh-t14g2" ]; then
-    ## Work
-    SMALL_SCREEN="eDP" # aka laptop screen
-    if [ "${1}" = "home" ]; then
-        # Home
-        # adaptor randomly changes what ports are connected
-        if xrandr | grep -q "DisplayPort-2 connected" ; then
-            BIG_LEFT_SCREEN="DisplayPort-2"
-            BIG_RIGHT_SCREEN="DisplayPort-3"
-        else
-            BIG_LEFT_SCREEN="DisplayPort-4"
-            BIG_RIGHT_SCREEN="DisplayPort-5"
-        fi
-    else
-        # Office
-        # adaptor randomly changes what ports are connected
-        if xrandr | grep -q "DisplayPort-2 connected" ; then
-            BIG_LEFT_SCREEN="DisplayPort-3"
-            BIG_RIGHT_SCREEN="DisplayPort-2"
-        else
-            BIG_LEFT_SCREEN="DisplayPort-5"
-            BIG_RIGHT_SCREEN="DisplayPort-4"
-        fi
-    fi
+else
+    echo "unkown profile. exiting..."
+    exit 1
+
 fi
 
 ## Move workspaces to screens

@@ -11,4 +11,4 @@ xrandr \
 
 nitrogen --restore
 
-reset_workspaces home
+reset_workspaces
