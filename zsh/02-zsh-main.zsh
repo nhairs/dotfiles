@@ -11,8 +11,15 @@ setopt autocd
 autoload -U colors
 colors
 
+
 # Should consider adding GOPATH somewhere. default is $HOME/go
 export PATH="$HOME/.local/bin:$HOME/go/bin:/usr/local/go/bin:$PATH"
+
+if [ -d "/usr/lib/jvm/jdk-17" ]; then
+    export JAVA_HOME=/usr/lib/jvm/jdk-17/
+    export PATH=$PATH:$JAVA_HOME/bin
+fi
+
 
 export EDITOR='vim'
 
