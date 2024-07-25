@@ -37,3 +37,6 @@
 #[includeIf "hasconfig:remote.*.url:git@github.com:lumin-gg/**"]
 [includeIf "gitdir:~/git/lumin/**"]
     path = ~/.gitconfig_lumin
+
+[includeIf "gitdir:~/git/fetch/**"]
+    path = ~/.gitconfig_fetch

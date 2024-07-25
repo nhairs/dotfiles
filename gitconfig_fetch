@@ -1,0 +1,9 @@
+[user]
+    name = Nicholas Hairs
+    email = nhairs@fetchtv.com.au
+
+[core]
+    sshCommand = ssh -i ~/.ssh/nhairs-fetch.20240624.ed25519 -i ~/.ssh/nhairs-fetch.20240624.rsa
+
+[url "ssh://git@gitlab.fetchtv.com.au/"]
+    insteadOf = https://gitlab.fetchtv.com.au

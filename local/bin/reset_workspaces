@@ -18,6 +18,12 @@ if [ "$(hostname)" = "radon" ]; then
     BIG_LEFT_SCREEN="DP-1-1"
     BIG_RIGHT_SCREEN="DP-1-2"
 
+elif [ "$(hostname)" = "nhairs-x1g8" ]; then
+    ## Work
+    # Home
+    BIG_LEFT_SCREEN="DVI-I-2-2"
+    BIG_RIGHT_SCREEN="DVI-I-1-1"
+
 else
     echo "unkown profile. exiting..."
     exit 1

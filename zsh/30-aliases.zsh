@@ -29,8 +29,6 @@ if which terraform >/dev/null; then
 fi
 
 
-alias -r vim="vim -p"
-
 alias -r newpy="cp ~/git/template.py"
 
 #alias -r nose="nosetests --with-yanc --with-watcher"

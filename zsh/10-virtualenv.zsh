@@ -6,6 +6,7 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 ### SETUP
 which virtualenv >/dev/null
 if [[ $? == 1 ]]; then
+    python3 -m venv ~/.local --system-site-packages
     python3 -m pip install --user virtualenv
 fi
 
