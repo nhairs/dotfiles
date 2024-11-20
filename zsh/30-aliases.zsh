@@ -20,6 +20,8 @@ alias -r gco='git checkout'
 alias -r gl="git log --date-order --graph --pretty=format:'%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cr) %C(bold blue)<%an>%C(reset)' --abbrev-commit --date=relative"
 alias -r gla="gl --all"
 
+alias -r now="date -u +%Y%m%dZ%H%M%S"
+
 if which terraform >/dev/null; then
     alias -r tf="terraform"
     alias -r tfw="terraform workspace"
