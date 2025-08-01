@@ -1,10 +1,43 @@
 #!/bin/bash
 
+## Functions
+## -----------------------------------------------------------------------------
+function move_workspaces {
+    if [[ -z "$1" ]] || [[ -z "$2" ]]; then
+        echo "usage: move_workspaces SCREEN WORKSPACES"
+        exit 1
+    fi
+
+    local SCREEN="$1"
+    local WORKSPACES="$2"
+
+    local COMMAND=""
+
+    local SCREEN_WORKSPACES=$(i3-msg -t get_workspaces | jq --arg SCREEN "$SCREEN" '[ .[] | select(.output==$SCREEN) | .num ] | join(" ")' | tr -d '"')
+    echo "screen workspaces: $SCREEN_WORKSPACES"
+
+    local ACTIVE_WORKSAPCES=$(i3-msg -t get_workspaces | jq '[ .[] | .num ] | join(" ")' | tr -d '"')
+    echo "active workspaces: $ACTIVE_WORKSAPCES"
+
+    for WORKSPACE in $WORKSPACES; do
+        if [[ "$ACTIVE_WORKSAPCES" == *$WORKSPACE* ]]; then
+            echo "workspace $WORKSPACE is active"
+            if [[ "$SCREEN_WORKSPACES" != *$WORKSPACE* ]]; then
+                echo "workspace $WORKSPACE not in $SCREEN"
+                local COMMAND="$COMMAND[workspace=^${WORKSPACE}$] move workspace to output ${SCREEN};"
+            fi
+        fi
+    done
+
+    echo "$COMMAND"
+    i3-msg -t command "$COMMAND"
+}
+
 ## Default Values
 ## -----------------------------------------------------------------------------
 
-BIG_LEFT_WORKSPACES="2 4 6 8 10 12"
-BIG_RIGHT_WORKSPACES="1 3 5 7 9 11 13"
+BIG_LEFT_WORKSPACES="2 4 6 8 10"
+BIG_RIGHT_WORKSPACES="1 3 5 7 9 11 12 13 14 15 16 17 18 19"
 SMALL_WORKSPACES="20"
 
 SMALL_SCREEN="eDP-1" # aka laptop screen
@@ -13,10 +46,8 @@ SMALL_SCREEN="eDP-1" # aka laptop screen
 ## -----------------------------------------------------------------------------
 
 if [ "$(hostname)" = "radon" ]; then
-    ## Personal
-    # Home
-    BIG_LEFT_SCREEN="DP-1-1"
-    BIG_RIGHT_SCREEN="DP-1-2"
+    BIG_LEFT_SCREEN=$(xrandr_to_edid | grep "DEL-39585-87GBP43" | cut -d ' ' -f 1)
+    BIG_RIGHT_SCREEN=$(xrandr_to_edid | grep "DEL-39585-JN0BP43" | cut -d ' ' -f 1)
 
 elif [ "$(hostname)" = "nhairs-x1g8" ]; then
     ## Work
@@ -32,17 +63,22 @@ fi
 
 ## Move workspaces to screens
 ## -----------------------------------------------------------------------------
+#COMMAND=""
 
-for WORKSPACE in $BIG_LEFT_WORKSPACES; do
-    i3-msg "[workspace=^${WORKSPACE}$] move workspace to output ${BIG_LEFT_SCREEN}"
-done
-
-
-for WORKSPACE in $SMALL_WORKSPACES; do
-    i3-msg "[workspace=^${WORKSPACE}$] move workspace to output ${SMALL_SCREEN}"
-done
+#for WORKSPACE in $BIG_LEFT_WORKSPACES; do
+#    COMMAND="$COMMAND;[workspace=^${WORKSPACE}$] move workspace to output ${BIG_LEFT_SCREEN}"
+#done
 
 
-for WORKSPACE in $BIG_RIGHT_WORKSPACES; do
-    i3-msg "[workspace=^${WORKSPACE}$] move workspace to output ${BIG_RIGHT_SCREEN}"
-done
+#for WORKSPACE in $SMALL_WORKSPACES; do
+#    COMMAND="$COMMAND;[workspace=^${WORKSPACE}$] move workspace to output ${SMALL_SCREEN}"
+#done
+
+
+#for WORKSPACE in $BIG_RIGHT_WORKSPACES; do
+#    COMMAND="$COMMAND;[workspace=^${WORKSPACE}$] move workspace to output ${BIG_RIGHT_SCREEN}"
+#done
+
+move_workspaces "$BIG_LEFT_SCREEN" "$BIG_LEFT_WORKSPACES"
+move_workspaces "$BIG_RIGHT_SCREEN" "$BIG_RIGHT_WORKSPACES"
+move_workspaces "$SMALL_SCREEN" "$SMALL_WORKSPACES"

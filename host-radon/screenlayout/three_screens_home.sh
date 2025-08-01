@@ -1,13 +1,16 @@
 #!/bin/bash
+
+BIG_LEFT=$(xrandr_to_edid | grep "DEL-39585-87GBP43" | cut -d ' ' -f 1)
+BIG_RIGHT=$(xrandr_to_edid | grep "DEL-39585-JN0BP43" | cut -d ' ' -f 1)
+OFF_OUTPUT=$(xrandr | grep -Eo "^[[:alnum:]-]*\s(dis)?connected" | grep -v eDP-1 | grep -v $BIG_LEFT | grep -v $BIG_RIGHT| cut -d " " -f 1 | xargs -I _ echo -n "--output _ --off ")
+
 xrandr \
-    --output eDP-1 --primary --mode 1920x1080 --pos 0x1440 --rotate normal \
-    --output DP-1-1 --mode 2560x1440 --pos 0x0 --rotate normal \
-    --output DP-1-2 --mode 2560x1440 --pos 2560x0 --rotate normal \
-    --output HDMI-2 --off \
-    --output HDMI-1 --off \
-    --output DP-1 --off \
-    --output DP-1-3 --off \
-    --output DP-2 --off
+    --output eDP-1 --mode 1920x1080 --pos 0x1440 --rotate normal \
+    --output $BIG_LEFT --mode 2560x1440 --pos 0x0 --rotate normal \
+    --output $BIG_RIGHT --primary --mode 2560x1440 --pos 2560x0 --rotate normal \
+    $OFF_OUTPUT
+
+sleep 5
 
 nitrogen --restore
 

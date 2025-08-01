@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+
+"""Utility to get EDID serials for xrandr monitors
+
+Based on the following references:
+- https://gist.github.com/mvollrath/9aa0198264e6b4890914
+- https://github.com/dd4e/pyedid/blob/5cf8c7fbf299b693dc0f979f445927be1e15f267/pyedid/helpers/__init__.py
+"""
+
+### IMPORTS
+### ============================================================================
+## Standard Library
+import re
+import subprocess
+from typing import Any, Union
+
+## Installed
+import pyedid
+
+
+### FUNCTIONS
+### ============================================================================
+def get_xrandr_verbose() -> str:
+    return subprocess.check_output(['xrandr', '--verbose'])
+
+
+def get_xrandr_edids(xrandr_raw: Union[str, bytes]) -> dict[str, pyedid.Edid]:
+    if isinstance(xrandr_raw, bytes):
+        xrandr_raw = xrandr_raw.decode()
+
+    edids: dict[str, pyedid.Edid]  = {}
+
+    lines = xrandr_raw.splitlines()
+    monitor = "__dummy__"
+    skip_line = -1
+
+    for i, line in enumerate(lines):
+        if i <= skip_line:
+            continue
+
+        # Get monitor
+        if re.match(r"^\S+ connected", line):
+            monitor = line.split()[0]
+            continue
+
+        # Get EDID
+        if line.strip().startswith("EDID:"):
+            if monitor == "__dummy__":
+                raise RuntimeException("Found EDID without finding a monitor!")
+
+            edid_raw = bytes.fromhex("".join([s.strip() for s in lines[i+1:i+9]]))
+            edid = pyedid.parse_edid(edid_raw)
+            edids[monitor] = edid
+            skip_line = i+9
+            continue
+
+    return edids
+
+
+### MAIN
+### ============================================================================
+if __name__ == "__main__":
+    for monitor, edid in get_xrandr_edids(get_xrandr_verbose()).items():
+        print("{monitor} {edid.manufacturer_pnp_id}-{edid.product_id}-{edid.serial}".format(monitor=monitor, edid=edid))
