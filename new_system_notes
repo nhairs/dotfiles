@@ -102,6 +102,10 @@ mkdir ~/Pictures/capture
 #barracudavpn
 #crowdstrike
 
+## Dock
+# https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu
+# https://github.com/AdnanHodzic/displaylink-debian
+
 # Zoom
 sudo apt  install libxcb-xtest0
 update_zoom  # is an alias now :D
