@@ -19,6 +19,7 @@ alias -r gca='git commit -a'
 alias -r gco='git checkout'
 alias -r gl="git log --date-order --graph --pretty=format:'%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cr) %C(bold blue)<%an>%C(reset)' --abbrev-commit --date=relative"
 alias -r gla="gl --all"
+alias -r gh="git rev-parse HEAD"
 
 alias -r now="date -u +%Y%m%dZ%H%M%S"
 
@@ -26,6 +27,7 @@ if which terraform >/dev/null; then
     alias -r tf="terraform"
     alias -r tfw="terraform workspace"
     alias -r tff="terraform fmt"
+    alias -r tffr="tff -recursive"
     alias -r tfp="terraform plan"
     alias -r tfa="terraform apply"
 fi
@@ -33,27 +35,14 @@ fi
 
 alias -r newpy="cp ~/git/template.py"
 
-#alias -r nose="nosetests --with-yanc --with-watcher"
-
 alias -r t="tree -I 'venv|venv2|venv3|__pycache__|*.pyc|node_modules'"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias -r alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-## Ensure that we only use gpg version ~=2
-if which gpg >/dev/null; then
-    # gpg exists, check version
-    if [[ $(gpg --version | head -n 1 | cut -d " " -f 3 | cut -d "." -f 1) != 2 ]]; then
-        # gpg isn't version 2, create alias to guard against using version 1
-        alias -r gpg="echo 'Use gpg2!'"
-    fi
-fi
-
-
 alias new_pass='echo `head /dev/urandom | base64 | tr -d / | tr -d + | head -c 32`'
-alias screenshot='gnome-screenshot -a -f ~/Pictures/capture/capture-`date +%Y%m%d-%H%M%S`.jpg'
-alias screenhere='gnome-screenshot -a -f ./capture-`date +%Y%m%d-%H%M%S`.jpg'
+alias new_random='new_pass | tr "[:upper:]" "[:lower:]"'
 
 alias update_zoom='sudo true && wget -O /tmp/zoom.deb https://zoom.us/client/latest/zoom_amd64.deb && sudo dpkg -i /tmp/zoom.deb; rm -f /tmp/zoom.deb'
 
