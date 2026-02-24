@@ -1,0 +1,205 @@
+#!/usr/bin/env bash
+
+# tf-clean.sh
+# Recursively locates and deletes .terraform directories.
+
+# Default variable states
+DRY_RUN=false
+USE_CACHE=true
+CACHE_DIR="/tmp"
+
+# -----------------------------------------------------------------------------
+# Function: show_help
+# Displays usage instructions
+# -----------------------------------------------------------------------------
+show_help() {
+    echo "Usage: $(basename "$0") [OPTIONS]"
+    echo ""
+    echo "Recursively locate and optionally delete '.terraform' directories in the current path."
+    echo ""
+    echo "Options:"
+    echo "  -h, --help       Show this help message and exit."
+    echo "  --no-cache       Bypass the caching mechanism and force a fresh search."
+    echo "  --dry-run        Go through the selection process but do not execute the deletion."
+}
+
+# -----------------------------------------------------------------------------
+# Argument Parsing
+# -----------------------------------------------------------------------------
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -h|--help) show_help; exit 0 ;;
+        --no-cache) USE_CACHE=false ;;
+        --dry-run) DRY_RUN=true ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+# -----------------------------------------------------------------------------
+# Cache File Generation
+# -----------------------------------------------------------------------------
+# Create a unique hash for the current directory path (supports macOS and Linux)
+if command -v md5sum >/dev/null 2>&1; then
+    DIR_HASH=$(pwd | md5sum | awk '{print $1}')
+elif command -v md5 >/dev/null 2>&1; then
+    DIR_HASH=$(pwd | md5 -q)
+else
+    # Fallback if neither md5sum nor md5 is available
+    DIR_HASH=$(pwd | sed 's/[^a-zA-Z0-9]/_/g')
+fi
+
+CACHE_FILE="${CACHE_DIR}/tf_cache_${DIR_HASH}.dat"
+
+# -----------------------------------------------------------------------------
+# Search & Optimization (with Cache Logic)
+# -----------------------------------------------------------------------------
+found_dirs=()
+
+is_cache_valid=false
+# Check if we can write to cache dir, if not, disable cache
+if [ ! -w "$CACHE_DIR" ]; then
+    USE_CACHE=false
+    echo "[WARNING] Cache directory ($CACHE_DIR) is not writable. Caching disabled."
+fi
+
+if [ "$USE_CACHE" = true ] && [ -f "$CACHE_FILE" ]; then
+    # Check if the cache file was modified within the last 60 minutes
+    if [ -n "$(find "$CACHE_FILE" -mmin -60 2>/dev/null)" ]; then
+        is_cache_valid=true
+    fi
+fi
+
+if [ "$is_cache_valid" = true ]; then
+    echo "[INFO] Reading from cache: $CACHE_FILE"
+    # Read cache into array securely handling spaces and newlines
+    while IFS= read -r -d '' line; do
+        [[ -n "$line" ]] && found_dirs+=("$line")
+    done < "$CACHE_FILE"
+else
+    echo "[INFO] Searching for .terraform directories. This may take a moment..."
+    # Perform optimized search: -prune stops recursion inside matched directories
+    # Use -print0 to handle paths with spaces or newlines safely
+    while IFS= read -r -d '' line; do
+        [[ -n "$line" ]] && found_dirs+=("$line")
+    done < <(find . -name ".terraform" -type d -prune -print0 2>/dev/null)
+
+    # Save to cache securely with null terminators
+    if [ ${#found_dirs[@]} -gt 0 ]; then
+        printf "%s\0" "${found_dirs[@]}" > "$CACHE_FILE"
+    else
+        > "$CACHE_FILE" # Create empty cache file
+    fi
+fi
+
+# -----------------------------------------------------------------------------
+# Initial Display
+# -----------------------------------------------------------------------------
+if [ ${#found_dirs[@]} -eq 0 ]; then
+    echo "No .terraform directories found in the current path."
+    exit 0
+fi
+
+echo ""
+echo "Found the following .terraform directories:"
+for dir in "${found_dirs[@]}"; do
+    echo "  - $dir"
+done
+echo ""
+
+# -----------------------------------------------------------------------------
+# Interactive Selection & Confirmation (Main Loop)
+# -----------------------------------------------------------------------------
+while true; do
+    staged_dirs=()
+
+    echo "=== Individual Directory Selection ==="
+    for dir in "${found_dirs[@]}"; do
+        while true; do
+            read -r -p "Stage '$dir' for deletion? (y/n/q): " answer
+            case $answer in
+                [Yy] ) staged_dirs+=("$dir"); break;;
+                [Nn] ) break;;
+                [Qq] ) echo "Aborting script."; exit 0;;
+                * ) echo "Invalid input. Please enter 'y' to stage, 'n' to skip, or 'q' to abort.";;
+            esac
+        done
+    done
+
+    if [ ${#staged_dirs[@]} -eq 0 ]; then
+        echo "No directories staged for deletion. Exiting."
+        exit 0
+    fi
+
+    # Calculate Space Saved
+    echo "Calculating space to be freed..."
+    # `du -shc` gives individual sizes and a total at the bottom. We extract the total.
+    SPACE_SAVED=$(du -shc "${staged_dirs[@]}" 2>/dev/null | tail -n 1 | awk '{print $1}')
+
+    # Ensure sizes under 1K show 'B' for bytes clarity if du omits the suffix
+    if [[ "$SPACE_SAVED" =~ ^[0-9]+$ ]]; then
+        SPACE_SAVED="${SPACE_SAVED}B"
+    fi
+
+    # Convert to Absolute Paths
+    staged_abs=()
+    for dir in "${staged_dirs[@]}"; do
+        # Strip leading ./ if present, then prepend current working directory
+        clean_dir="${dir#./}"
+        if [[ "$clean_dir" == /* ]]; then
+            staged_abs+=("$clean_dir")
+        else
+            staged_abs+=("$PWD/$clean_dir")
+        fi
+    done
+
+    # Final Confirmation
+    echo ""
+    echo "=== Final Confirmation ==="
+    echo "The following directories will be DELETED:"
+    for abs_dir in "${staged_abs[@]}"; do
+        echo "  - $abs_dir"
+    done
+    echo "Total disk space to be freed: $SPACE_SAVED"
+    echo ""
+
+    proceed=false
+    while true; do
+        read -r -p "Proceed with deletion? (y/n/q): " final_ans
+        case $final_ans in
+            [Yy] ) proceed=true; break;;
+            [Nn] ) proceed=false; break;;
+            [Qq] ) echo "Aborting script."; exit 0;;
+            * ) echo "Invalid input. Please enter 'y' to execute, 'n' to restart selection, or 'q' to abort.";;
+        esac
+    done
+
+    if [ "$proceed" = true ]; then
+        break # Break the main while loop and proceed to execution
+    fi
+
+    echo ""
+    echo "[INFO] Selection cleared. Restarting prompts..."
+    echo "------------------------------------------------"
+    echo ""
+done
+
+# -----------------------------------------------------------------------------
+# Execution
+# -----------------------------------------------------------------------------
+echo ""
+echo "=== Execution ==="
+for abs_dir in "${staged_abs[@]}"; do
+    echo "Executing: rm -rf \"$abs_dir\""
+    if [ "$DRY_RUN" = false ]; then
+        rm -rf "$abs_dir"
+    fi
+done
+
+if [ "$DRY_RUN" = true ]; then
+    echo ""
+    echo "[INFO] Dry run complete. No files were actually deleted."
+else
+    echo ""
+    echo "[SUCCESS] Selected .terraform directories have been deleted!"
+fi
