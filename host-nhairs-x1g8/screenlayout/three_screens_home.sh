@@ -1,5 +1,17 @@
-#!/bin/sh
-xrandr --output eDP-1 --mode 2560x1440 --pos 0x1440 --rotate normal --output DP-1 --off --output HDMI-1 --off --output DP-2 --off --output DVI-I-4-4 --off --output DVI-I-3-3 --off --output DVI-I-2-2 --mode 2560x1440 --pos 0x0 --rotate normal --output DVI-I-1-1 --primary --mode 2560x1440 --pos 2560x0 --rotate normal
+#!/bin/bash
+
+BIG_LEFT=$(xrandr_to_edid | grep "DEL-39585-87GBP43" | cut -d ' ' -f 1)
+BIG_RIGHT=$(xrandr_to_edid | grep "DEL-39585-JN0BP43" | cut -d ' ' -f 1)
+OFF_OUTPUT=$(xrandr | grep -Eo "^[[:alnum:]-]*\s(dis)?connected" | grep -v eDP-1 | grep -v $BIG_LEFT | grep -v $BIG_RIGHT| cut -d " " -f 1 | xargs -I _ echo -n "--output _ --off ")
+
+xrandr \
+    --output eDP-1 --mode 2560x1440 --pos 0x1440 --rotate normal \
+    --output $BIG_LEFT --mode 2560x1440 --pos 0x0 --rotate normal \
+    --output $BIG_RIGHT --primary --mode 2560x1440 --pos 2560x0 --rotate normal \
+    $OFF_OUTPUT
+
+sleep 5
 
 nitrogen --restore
-~/.local/bin/reset_workspaces
+
+reset_workspaces
