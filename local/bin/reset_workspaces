@@ -48,8 +48,17 @@ SMALL_SCREEN="eDP-1" # aka laptop screen
 ## -----------------------------------------------------------------------------
 
 if [ "$(hostname)" = "radon" ]; then
-    BIG_LEFT_SCREEN=$(xrandr_to_edid | grep "DEL-39585-87GBP43" | cut -d ' ' -f 1)
-    BIG_RIGHT_SCREEN=$(xrandr_to_edid | grep "DEL-39585-JN0BP43" | cut -d ' ' -f 1)
+    BIG_LEFT_SCREEN=$(xrandr_to_edid | grep "DEL-39329-87GBP43" | cut -d ' ' -f 1)
+    #BIG_LEFT_SCREEN=$(xrandr_to_edid | grep "DEL-39585-87GBP43" | cut -d ' ' -f 1)
+    BIG_RIGHT_SCREEN=$(xrandr_to_edid | grep "DEL-26609-FB9YCH4" | cut -d ' ' -f 1)
+    #BIG_RIGHT_SCREEN=$(xrandr_to_edid | grep "DEL-39585-JN0BP43" | cut -d ' ' -f 1)
+
+elif [ "$(hostname)" = "neon" ]; then
+    BIG_LEFT_SCREEN=$(xrandr_to_edid | grep "DEL-39329-87GBP43" | cut -d ' ' -f 1)
+    #BIG_LEFT_SCREEN=$(xrandr_to_edid | grep "DEL-39585-87GBP43" | cut -d ' ' -f 1)
+    BIG_RIGHT_SCREEN=$(xrandr_to_edid | grep "DEL-26609-FB9YCH4" | cut -d ' ' -f 1)
+    #BIG_RIGHT_SCREEN=$(xrandr_to_edid | grep "DEL-39585-JN0BP43" | cut -d ' ' -f 1)
+    SMALL_SCREEN="eDP"
 
 elif [ "$(hostname)" = "nhairs-x1g8" ]; then
     ## Work
