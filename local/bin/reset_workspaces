@@ -3,34 +3,30 @@
 ## Functions
 ## -----------------------------------------------------------------------------
 function move_workspaces {
-    if [[ -z "$1" ]] || [[ -z "$2" ]]; then
-        echo "usage: move_workspaces SCREEN WORKSPACES"
-        exit 1
-    fi
-
     local SCREEN="$1"
     local WORKSPACES="$2"
+    local CURRENT COMMAND RESPONSE
 
-    local COMMAND=""
+    if ! CURRENT=$(i3-msg -t get_workspaces) ||
+       ! COMMAND=$(jq -r --arg screen "$SCREEN" --arg workspaces "$WORKSPACES" '
+           ($workspaces | split(" ") | map(tonumber)) as $numbers
+           | [sort_by(.num)[]
+               | select(.output != $screen and (.num as $num | $numbers | index($num) != null))
+               | if (.id | type) != "number" then error("Missing i3 workspace container ID")
+                 else "[con_id=\(.id)] move workspace to output \($screen | @json)"
+                 end]
+           | join(";")
+       ' <<< "$CURRENT"); then
+        echo "Cannot read i3 workspaces for $SCREEN." >&2
+        return 1
+    fi
+    [[ -n $COMMAND ]] || return 0
 
-    local SCREEN_WORKSPACES=$(i3-msg -t get_workspaces | jq --arg SCREEN "$SCREEN" '[ .[] | select(.output==$SCREEN) | .num ] | join(" ")' | tr -d '"')
-    echo "screen workspaces: $SCREEN_WORKSPACES"
-
-    local ACTIVE_WORKSAPCES=$(i3-msg -t get_workspaces | jq '[ .[] | .num ] | join(" ")' | tr -d '"')
-    echo "active workspaces: $ACTIVE_WORKSAPCES"
-
-    for WORKSPACE in $WORKSPACES; do
-        if [[ "$ACTIVE_WORKSAPCES" == *$WORKSPACE* ]]; then
-            echo "workspace $WORKSPACE is active"
-            if [[ "$SCREEN_WORKSPACES" != *$WORKSPACE* ]]; then
-                echo "workspace $WORKSPACE not in $SCREEN"
-                local COMMAND="$COMMAND[workspace=^${WORKSPACE}$] move workspace to output ${SCREEN};"
-            fi
-        fi
-    done
-
-    echo "$COMMAND"
-    i3-msg -t command "$COMMAND"
+    if ! RESPONSE=$(i3-msg -t command "$COMMAND") ||
+       ! jq -e 'type == "array" and length > 0 and all(.[]; .success == true)' <<< "$RESPONSE" >/dev/null; then
+        printf 'Workspace moves to %s failed: %s\n%s\n' "$SCREEN" "$COMMAND" "$RESPONSE" >&2
+        return 1
+    fi
 }
 
 ## Default Values
@@ -99,6 +95,15 @@ fi
 #    COMMAND="$COMMAND;[workspace=^${WORKSPACE}$] move workspace to output ${BIG_RIGHT_SCREEN}"
 #done
 
-move_workspaces "$BIG_LEFT_SCREEN" "$BIG_LEFT_WORKSPACES"
-move_workspaces "$BIG_RIGHT_SCREEN" "$BIG_RIGHT_WORKSPACES"
-move_workspaces "$SMALL_SCREEN" "$SMALL_WORKSPACES"
+if [[ ! $BIG_LEFT_SCREEN =~ ^[[:alnum:]_.-]+$ || ! $BIG_RIGHT_SCREEN =~ ^[[:alnum:]_.-]+$ ||
+      $BIG_LEFT_SCREEN == "$BIG_RIGHT_SCREEN" || $BIG_LEFT_SCREEN == "$SMALL_SCREEN" ||
+      $BIG_RIGHT_SCREEN == "$SMALL_SCREEN" ]]; then
+    echo 'Cannot reset workspaces without three distinct detected outputs.' >&2
+    exit 1
+fi
+
+STATUS=0
+move_workspaces "$BIG_LEFT_SCREEN" "$BIG_LEFT_WORKSPACES" || STATUS=1
+move_workspaces "$BIG_RIGHT_SCREEN" "$BIG_RIGHT_WORKSPACES" || STATUS=1
+move_workspaces "$SMALL_SCREEN" "$SMALL_WORKSPACES" || STATUS=1
+exit "$STATUS"
