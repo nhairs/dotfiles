@@ -15,12 +15,16 @@ sudo apt install \
     htop \
     tldr \
     tree \
-    silversearcher-ag \
+    ripgrep \
     jq \
     mtr \
     nmap \
     whois \
-    ipcalc
+    ipcalc \
+    flameshot
+
+# snixembed (fix for flameshot)
+# https://gist.github.com/archisman-panigrahi/cd571ddea1aa2c5e2b4fa7bcbee7d5df
 
 # Neovim
 # ubuntu # sudo add-apt-repository ppa:neovim-ppa/stable
