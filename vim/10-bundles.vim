@@ -38,41 +38,41 @@ call dein#begin(s:plugin_dir)
 " Allow dein.vim to update itself O.o
 call dein#add('Shougo/dein.vim')
 
-call dein#add('godlygeek/tabular')
-call dein#add('matze/vim-move') " Visually move text around.
-call dein#add('mbbill/undotree') " Shows the vim undo tree in a window.
+"call dein#add('godlygeek/tabular')
+"call dein#add('matze/vim-move') " Visually move text around.
+"call dein#add('mbbill/undotree') " Shows the vim undo tree in a window.
 call dein#add('solarnz/nerdcommenter') " Easier commenting and uncommenting.
 " Easy replacement for areas of text. Quicker than writing a regular
 " expression.
-call dein#add('kristijanhusak/vim-multiple-cursors')
-call dein#add('tpope/vim-eunuch') " Unix functions
-call dein#add('tpope/vim-fugitive') " Git integration
-call dein#add('tpope/vim-git') " Git syntax highlighting
-call dein#add('tpope/vim-obsession') " Better session saving support
-call dein#add('tpope/vim-speeddating') " Increments dates correctly
-call dein#add('tpope/vim-vinegar') " Improves netrw
-call dein#add('zhaocai/DirDiff.vim') " Allows you to diff directories
+"call dein#add('kristijanhusak/vim-multiple-cursors')
+"call dein#add('tpope/vim-eunuch') " Unix functions
+"call dein#add('tpope/vim-fugitive') " Git integration
+"call dein#add('tpope/vim-git') " Git syntax highlighting
+"call dein#add('tpope/vim-obsession') " Better session saving support
+"call dein#add('tpope/vim-speeddating') " Increments dates correctly
+"call dein#add('tpope/vim-vinegar') " Improves netrw
+"call dein#add('zhaocai/DirDiff.vim') " Allows you to diff directories
 call dein#add('junegunn/vim-easy-align') " A simple Vim alignment plugin
-call dein#add('solarnz/arcanist.vim') " Arcanist syntax highlighting
+"call dein#add('solarnz/arcanist.vim') " Arcanist syntax highlighting
 call dein#add('Shougo/deoplete.nvim')
 call dein#add('editorconfig/editorconfig-vim') " Editor agnostic project settings
 call dein#add('solarnz/whitespace.vim') " Remove trailing whitespace when saving
 call dein#add('solarnz/committia.vim') " Show a differential when doing git commit
 call dein#add('junegunn/vim-peekaboo') " Show register values
 call dein#add('chrisbra/vim-diff-enhanced') " Better differential algorithms
-call dein#add('vimwiki/vimwiki')
-call dein#add('tpope/vim-surround')
+"call dein#add('vimwiki/vimwiki')
+"call dein#add('tpope/vim-surround')
 
-call dein#add('tpope/vim-dadbod') " ?better? SQL plugin
+"call dein#add('tpope/vim-dadbod') " ?better? SQL plugin
 
-call dein#add('junegunn/fzf', {'merged': 0})
-call dein#add('junegunn/fzf.vim')
+"call dein#add('junegunn/fzf', {'merged': 0})
+"call dein#add('junegunn/fzf.vim')
 
 " Theme / Looks
 let g:solarnz_will_load_lightline = 1
 call dein#add('itchyny/lightline.vim') " The best statusbar plugin.
 call dein#add('chriskempson/base16-vim') " The base16 color scheme for vim
-call dein#add('junegunn/goyo.vim') " Distraction free editing
+"call dein#add('junegunn/goyo.vim') " Distraction free editing
 
 " Language plugins
 call dein#add('sheerun/vim-polyglot')  " One language plugin to rule them all
