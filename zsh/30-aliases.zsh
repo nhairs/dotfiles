@@ -19,7 +19,7 @@ alias -r gca='git commit -a'
 alias -r gco='git checkout'
 alias -r gl="git log --date-order --graph --pretty=format:'%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cr) %C(bold blue)<%an>%C(reset)' --abbrev-commit --date=relative"
 alias -r gla="gl --all"
-alias -r gh="git rev-parse HEAD"
+alias -r ghead="git rev-parse HEAD"
 
 alias -r now="date -u +%Y%m%dZ%H%M%S"
 
@@ -43,6 +43,7 @@ alias -r alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || e
 
 alias new_pass='echo `head /dev/urandom | base64 | tr -d / | tr -d + | head -c 32`'
 alias new_random='new_pass | tr "[:upper:]" "[:lower:]"'
+alias new_error='echo "ER$(head /dev/urandom | base64 | tr -d / | tr -d + | tr "[:upper:]" "[:lower:]" | head -c 12)"'
 
 alias update_zoom='sudo true && wget -O /tmp/zoom.deb https://zoom.us/client/latest/zoom_amd64.deb && sudo dpkg -i /tmp/zoom.deb; rm -f /tmp/zoom.deb'
 
