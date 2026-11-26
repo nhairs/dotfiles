@@ -143,10 +143,14 @@ bindsym XF86MonBrightnessDown exec --no-startup-id light -U 10 # decrease screen
 bindsym XF86Display exec --no-startup-id arandr
 
 # Backgrounds
+exec --no-startup-id snixembed --fork
 exec --no-startup-id nitrogen --restore
 exec --no-startup-id nm-applet
 exec --no-startup-id udiskie -t
 exec --no-startup-id blueman-applet
+exec --no-startup-id flameshot
+exec --no-startup-id netbird-ui
+
 # exec --no-startup-id volumeicon
 # look into:
 # - xautolock (https://michaelabrahamsen.com/posts/custom-lockscreen-i3lock/)
@@ -205,5 +209,6 @@ bindsym $mod+m mode "mv_screen"
 # finds out, if available)
 bar {
     status_command i3status
+    tray_output primary
 #    font pango:DejaVu Sans Mono 10
 }
